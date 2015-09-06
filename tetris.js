@@ -10,6 +10,12 @@ var otherBlocks={
 	blocks:[]
 }
 
+for(i=otherBlocks.height;i<NROWS;i++){
+	for(j=0;j<NCOLS;j++){
+		otherBlocks.blocks[j+(i*NCOLS)]=1;
+	}
+}
+
 var fallingBlock={
 	topRow:0,
 	bottomRow:0,
@@ -47,6 +53,9 @@ var fallingBlock={
 			}
 		}
 		fallingBlock.newBlock();
+		if(fallingBlock.bottomRow<=otherBlocks.height){
+			otherBlocks.height=fallingBlock.bottomRow-1;
+		}
 	},
 	newBlock:function(){
 		fallingBlock.topRow=0;
@@ -76,7 +85,16 @@ function updateGame(){
 
 function updateBlocks(){
 	if(fallingBlock.bottomRow>=otherBlocks.height){
-		fallingBlock.crash();
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			for(j=0;j<NCOLS;j++){
+				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
+					if(otherBlocks.blocks[j+((i+1)*NCOLS)]>0){
+						fallingBlock.crash();
+						return;
+					}
+				}
+			}
+		}
 	}
 	for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 		for(j=0;j<NCOLS;j++){
