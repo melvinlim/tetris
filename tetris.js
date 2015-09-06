@@ -20,6 +20,7 @@ for(i=(otherBlocks.height+1);i<NROWS;i++){
 }
 
 var fallingBlock={
+	pivot:7,
 	type:0,
 	state:0,
 	topRow:0,
@@ -49,6 +50,7 @@ var fallingBlock={
 				}
 			}
 		}
+		fallingBlock.pivot--;
 	},
 	moveRight:function(){
 		if(fallingBlock.bottomRow>=otherBlocks.height){
@@ -74,6 +76,7 @@ var fallingBlock={
 				}
 			}
 		}
+		fallingBlock.pivot++;
 	},
 	crash:function(){
 		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
@@ -90,7 +93,8 @@ var fallingBlock={
 		fallingBlock.type=0;
 		fallingBlock.topRow=1;
 		fallingBlock.bottomRow=1;
-		for(j=5;j<9;j++){
+		for(j=(fallingBlock.pivot-2);j<(fallingBlock.pivot+2);j++){
+		//for(j=5;j<9;j++){
 			fallingBlock.blocks[j+(1*NCOLS)]=1;
 		}
 	},
@@ -105,6 +109,7 @@ var fallingBlock={
 		}
 	},
 	newBlock:function(){
+		fallingBlock.pivot=7;
 		for(i=0;i<NROWS;i++){
 			for(j=0;j<NCOLS;j++){
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
@@ -121,6 +126,13 @@ var fallingBlock={
 			default:
 		}
 	},
+	clearBlock:function(){
+		for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
+			for(j=0;j<NCOLS;j++){
+				fallingBlock.blocks[j+(i*NCOLS)]=0;
+			}
+		}
+	},
 	rotateCCW:function(){
 		fallingBlock.state--;
 		if(fallingBlock.state<0)	fallingBlock.state=3;
@@ -129,27 +141,22 @@ var fallingBlock={
 				switch(fallingBlock.state){
 					case 0:
 					case 2:
-						for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
-							for(j=0;j<NCOLS;j++){
-								fallingBlock.blocks[j+(i*NCOLS)]=0;
-							}
+						if(fallingBlock.pivot<2||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
 						}
+						fallingBlock.clearBlock();
 						fallingBlock.bottomRow=fallingBlock.topRow;
-						for(j=5;j<9;j++){
+						for(j=(fallingBlock.pivot-2);j<(fallingBlock.pivot+2);j++){
 							fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
 						}
 					break;
 					case 1:
 					case 3:
-						//fallingBlock.topRow=1;
-						//fallingBlock.bottomRow=1;
-						for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
-							for(j=0;j<NCOLS;j++){
-								fallingBlock.blocks[j+(i*NCOLS)]=0;
-							}
-						}
+						fallingBlock.clearBlock();
 						fallingBlock.bottomRow=fallingBlock.topRow+3;
-						j=7;
+						j=fallingBlock.pivot;
 						for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 							fallingBlock.blocks[j+(i*NCOLS)]=1;
 						}
