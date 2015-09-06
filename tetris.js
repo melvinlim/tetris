@@ -1,21 +1,41 @@
 var i;
+var j;
 var NROWS=60;
 var NCOLS=30;
 var PXSZ=10;
 var arr=[];
+
+var fallingBlock={
+	topRow:0,
+	bottomRow:0,
+	blocks:[],
+	moveLeft:function(){
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			for(j=1;j<NCOLS;j++){
+				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
+					fallingBlock.blocks[j+(i*NCOLS)-1]=1;
+					fallingBlock.blocks[j+(i*NCOLS)]=0;
+				}
+			}
+		}
+	}
+};
+
 for(i=0;i<NROWS;i++){
 	for(j=0;j<NCOLS;j++){
 		arr[j+(i*NCOLS)]=0;
+		fallingBlock.blocks[j+(i*NCOLS)]=0;
 	}
 }
+
 for(j=5;j<9;j++){
+	fallingBlock.blocks[j]=1;
 	arr[j]=1;
 }
-//window.alert(arr);
 var canvas=document.getElementById("myCanvas");
 var cv=canvas.getContext("2d");
 
-setInterval(updateGame,100);
+setInterval(updateGame,300);
 
 function updateGame(){
 	updateBlocks();
@@ -24,6 +44,17 @@ function updateGame(){
 }
 
 function updateBlocks(){
+	for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+		for(j=0;j<NCOLS;j++){
+			if(fallingBlock.blocks[j+(i*NCOLS)]>0){
+				fallingBlock.blocks[j+((i+1)*NCOLS)]=1;
+				fallingBlock.blocks[j+(i*NCOLS)]=0;
+			}
+		}
+	}
+	fallingBlock.topRow++;
+	fallingBlock.bottomRow++;
+/*
 	for(i=(NROWS-2);i>=0;i--){
 		for(j=0;j<NCOLS;j++){
 			if(arr[j+(i*NCOLS)]>0){
@@ -32,10 +63,19 @@ function updateBlocks(){
 			}
 		}
 	}
+*/
 }
 
 function drawBlocks(){
 	cv.fillStyle="#ffffff";
+	for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+		for(j=0;j<NCOLS;j++){
+			if(fallingBlock.blocks[j+(i*NCOLS)]>0){
+				cv.fillRect(j*PXSZ,i*PXSZ,PXSZ,PXSZ);
+			}
+		}
+	}
+/*
 	for(i=0;i<NROWS;i++){
 		for(j=0;j<NCOLS;j++){
 			if(arr[j+(i*NCOLS)]>0){
@@ -43,9 +83,36 @@ function drawBlocks(){
 			}
 		}
 	}
+*/
 }
 
 function drawBackground(){
 	cv.fillStyle="#000000";
 	cv.fillRect(0,0,NCOLS*PXSZ,NROWS*PXSZ);
+}
+
+document.onkeydown=function(event){
+	event=event||window.event;
+	var x=event.keyCode;
+	switch(x){
+		case 37:
+			fallingBlock.moveLeft();
+		break;
+		case 38:	//up key
+			rotateCCW();
+		break;
+		case 39:
+			moveRight();
+		break;
+		case 40:
+			moveDown();
+		break;
+		case 122:		//z key
+			rotateCCW();
+		break;
+		case 120:		//x key
+			rotateCW();
+		break;
+		default:
+	}
 }
