@@ -1,10 +1,11 @@
 var i;
 var j;
-var NROWS=60;
+var NROWS=61;
 var NCOLS=30;
 var PXSZ=10;
 
-var INITIALHEIGHT=10;
+var INITIALHEIGHT=12;
+//var INITIALHEIGHT=NROWS-2;
 
 var otherBlocks={
 	height:INITIALHEIGHT,
@@ -172,17 +173,18 @@ function drawBlocks(){
 	tmp=fallingBlock.topRow;
 	if(tmp==0)	tmp=1;
 	for(i=tmp;i<=fallingBlock.bottomRow;i++){
-	//for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 		for(j=0;j<NCOLS;j++){
 			if(fallingBlock.blocks[j+(i*NCOLS)]>0){
-				cv.fillRect(j*PXSZ,i*PXSZ,PXSZ,PXSZ);
+				cv.fillRect(j*PXSZ,(i-1)*PXSZ,PXSZ,PXSZ);
+				//cv.fillRect(j*PXSZ,(i)*PXSZ,PXSZ,PXSZ);
 			}
 		}
 	}
 	for(i=otherBlocks.height;i<NROWS;i++){
 		for(j=0;j<NCOLS;j++){
 			if(otherBlocks.blocks[j+(i*NCOLS)]>0){
-				cv.fillRect(j*PXSZ,i*PXSZ,PXSZ,PXSZ);
+				cv.fillRect(j*PXSZ,(i-1)*PXSZ,PXSZ,PXSZ);
+				//cv.fillRect(j*PXSZ,i*PXSZ,PXSZ,PXSZ);
 			}
 		}
 	}
@@ -190,7 +192,7 @@ function drawBlocks(){
 
 function drawBackground(){
 	cv.fillStyle="#000000";
-	cv.fillRect(0,1,NCOLS*PXSZ,(NROWS-1)*PXSZ);
+	cv.fillRect(0,0,NCOLS*PXSZ,(NROWS-1)*PXSZ);
 }
 
 document.onkeydown=function(event){
