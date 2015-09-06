@@ -20,6 +20,8 @@ for(i=(otherBlocks.height+1);i<NROWS;i++){
 }
 
 var fallingBlock={
+	type:0,
+	state:0,
 	topRow:0,
 	bottomRow:0,
 	blocks:[],
@@ -85,6 +87,7 @@ var fallingBlock={
 		}
 	},
 	newB0:function(){
+		fallingBlock.type=0;
 		fallingBlock.topRow=1;
 		fallingBlock.bottomRow=1;
 		for(j=5;j<9;j++){
@@ -92,6 +95,7 @@ var fallingBlock={
 		}
 	},
 	newB1:function(){
+		fallingBlock.type=1;
 		fallingBlock.topRow=0;
 		fallingBlock.bottomRow=1;
 		for(i=0;i<2;i++){
@@ -117,6 +121,49 @@ var fallingBlock={
 			default:
 		}
 	},
+	rotateCCW:function(){
+		fallingBlock.state--;
+		if(fallingBlock.state<0)	fallingBlock.state=3;
+		switch(fallingBlock.type){
+			case 0:
+				switch(fallingBlock.state){
+					case 0:
+					case 2:
+						for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
+							for(j=0;j<NCOLS;j++){
+								fallingBlock.blocks[j+(i*NCOLS)]=0;
+							}
+						}
+						fallingBlock.bottomRow=fallingBlock.topRow;
+						for(j=5;j<9;j++){
+							fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+						}
+					break;
+					case 1:
+					case 3:
+						//fallingBlock.topRow=1;
+						//fallingBlock.bottomRow=1;
+						for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
+							for(j=0;j<NCOLS;j++){
+								fallingBlock.blocks[j+(i*NCOLS)]=0;
+							}
+						}
+						fallingBlock.bottomRow=fallingBlock.topRow+3;
+						j=7;
+						for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+					break;
+					default:
+				}
+			break;
+			case 1:
+			break;
+			default:
+		}
+	},
+	rotateCW:function(){
+	},
 	fall:function(){
 		if(fallingBlock.bottomRow>=otherBlocks.height){
 			for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
@@ -131,7 +178,6 @@ var fallingBlock={
 			}
 		}
 		for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
-		//for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 			for(j=0;j<NCOLS;j++){
 				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
 					fallingBlock.blocks[j+((i+1)*NCOLS)]=1;
@@ -203,7 +249,7 @@ document.onkeydown=function(event){
 			fallingBlock.moveLeft();
 		break;
 		case 38:	//up key
-			rotateCCW();
+			fallingBlock.rotateCCW();
 		break;
 		case 39:
 			fallingBlock.moveRight();
@@ -212,10 +258,10 @@ document.onkeydown=function(event){
 			fallingBlock.fall();
 		break;
 		case 122:		//z key
-			rotateCCW();
+			fallingBlock.rotateCCW();
 		break;
 		case 120:		//x key
-			rotateCW();
+			fallingBlock.rotateCW();
 		break;
 		default:
 	}
