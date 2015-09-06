@@ -4,6 +4,12 @@ var NROWS=60;
 var NCOLS=30;
 var PXSZ=10;
 
+var otherBlocks={
+	height:5,
+	//height:NROWS-1,
+	blocks:[]
+}
+
 var fallingBlock={
 	topRow:0,
 	bottomRow:0,
@@ -33,18 +39,30 @@ var fallingBlock={
 				}
 			}
 		}
+	},
+	crash:function(){
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			for(j=0;j<NCOLS;j++){
+				otherBlocks.blocks[j+(i*NCOLS)]|=fallingBlock.blocks[j+(i*NCOLS)];
+			}
+		}
+		fallingBlock.newBlock();
+	},
+	newBlock:function(){
+		fallingBlock.topRow=0;
+		fallingBlock.bottomRow=0;
+		for(i=0;i<NROWS;i++){
+			for(j=0;j<NCOLS;j++){
+				fallingBlock.blocks[j+(i*NCOLS)]=0;
+			}
+		}
+
+		for(j=5;j<9;j++){
+			fallingBlock.blocks[j]=1;
+		}
 	}
 };
-
-for(i=0;i<NROWS;i++){
-	for(j=0;j<NCOLS;j++){
-		fallingBlock.blocks[j+(i*NCOLS)]=0;
-	}
-}
-
-for(j=5;j<9;j++){
-	fallingBlock.blocks[j]=1;
-}
+fallingBlock.newBlock();
 var canvas=document.getElementById("myCanvas");
 var cv=canvas.getContext("2d");
 
@@ -57,6 +75,9 @@ function updateGame(){
 }
 
 function updateBlocks(){
+	if(fallingBlock.bottomRow>=otherBlocks.height){
+		fallingBlock.crash();
+	}
 	for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 		for(j=0;j<NCOLS;j++){
 			if(fallingBlock.blocks[j+(i*NCOLS)]>0){
@@ -67,16 +88,6 @@ function updateBlocks(){
 	}
 	fallingBlock.topRow++;
 	fallingBlock.bottomRow++;
-/*
-	for(i=(NROWS-2);i>=0;i--){
-		for(j=0;j<NCOLS;j++){
-			if(arr[j+(i*NCOLS)]>0){
-				arr[j+((i+1)*NCOLS)]=1;
-				arr[j+(i*NCOLS)]=0;
-			}
-		}
-	}
-*/
 }
 
 function drawBlocks(){
@@ -88,15 +99,13 @@ function drawBlocks(){
 			}
 		}
 	}
-/*
-	for(i=0;i<NROWS;i++){
+	for(i=otherBlocks.height;i<NROWS;i++){
 		for(j=0;j<NCOLS;j++){
-			if(arr[j+(i*NCOLS)]>0){
+			if(otherBlocks.blocks[j+(i*NCOLS)]>0){
 				cv.fillRect(j*PXSZ,i*PXSZ,PXSZ,PXSZ);
 			}
 		}
 	}
-*/
 }
 
 function drawBackground(){
