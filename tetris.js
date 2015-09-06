@@ -84,15 +84,15 @@ var fallingBlock={
 		}
 	},
 	newB0:function(){
-		fallingBlock.topRow=0;
-		fallingBlock.bottomRow=0;
+		fallingBlock.topRow=1;
+		fallingBlock.bottomRow=1;
 		for(j=5;j<9;j++){
-			fallingBlock.blocks[j]=1;
+			fallingBlock.blocks[j+(1*NCOLS)]=1;
 		}
 	},
 	newB1:function(){
 		fallingBlock.topRow=0;
-		fallingBlock.bottomRow=0;
+		fallingBlock.bottomRow=1;
 		for(i=0;i<2;i++){
 			for(j=5;j<7;j++){
 				fallingBlock.blocks[j+(i*NCOLS)]=1;
@@ -129,7 +129,8 @@ var fallingBlock={
 				}
 			}
 		}
-		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+		for(i=fallingBlock.bottomRow;i>=fallingBlock.topRow;i--){
+		//for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 			for(j=0;j<NCOLS;j++){
 				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
 					fallingBlock.blocks[j+((i+1)*NCOLS)]=1;
@@ -145,7 +146,6 @@ fallingBlock.newBlock();
 var canvas=document.getElementById("myCanvas");
 var cv=canvas.getContext("2d");
 
-//setInterval(updateGame,300);
 setInterval(updateGame,10);
 
 var t=0;
@@ -165,9 +165,14 @@ function updateBlocks(){
 	fallingBlock.fall();
 }
 
+var tmp;
+
 function drawBlocks(){
 	cv.fillStyle="#ffffff";
-	for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+	tmp=fallingBlock.topRow;
+	if(tmp==0)	tmp=1;
+	for(i=tmp;i<=fallingBlock.bottomRow;i++){
+	//for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 		for(j=0;j<NCOLS;j++){
 			if(fallingBlock.blocks[j+(i*NCOLS)]>0){
 				cv.fillRect(j*PXSZ,i*PXSZ,PXSZ,PXSZ);
@@ -185,7 +190,7 @@ function drawBlocks(){
 
 function drawBackground(){
 	cv.fillStyle="#000000";
-	cv.fillRect(0,0,NCOLS*PXSZ,NROWS*PXSZ);
+	cv.fillRect(0,1,NCOLS*PXSZ,(NROWS-1)*PXSZ);
 }
 
 document.onkeydown=function(event){
