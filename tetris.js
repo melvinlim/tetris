@@ -10,7 +10,7 @@ var otherBlocks={
 	blocks:[]
 }
 
-for(i=otherBlocks.height;i<NROWS;i++){
+for(i=(otherBlocks.height+1);i<NROWS;i++){
 	for(j=0;j<NCOLS;j++){
 		otherBlocks.blocks[j+(i*NCOLS)]=1;
 	}
@@ -65,47 +65,57 @@ var fallingBlock={
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
 			}
 		}
-
 		for(j=5;j<9;j++){
 			fallingBlock.blocks[j]=1;
 		}
+	},
+	fall:function(){
+		if(fallingBlock.bottomRow>=otherBlocks.height){
+			for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+				for(j=0;j<NCOLS;j++){
+					if(fallingBlock.blocks[j+((i)*NCOLS)]>0){
+						if(otherBlocks.blocks[j+((i+1)*NCOLS)]>0){
+							fallingBlock.crash();
+							return;
+						}
+					}
+				}
+			}
+		}
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			for(j=0;j<NCOLS;j++){
+				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
+					fallingBlock.blocks[j+((i+1)*NCOLS)]=1;
+					fallingBlock.blocks[j+(i*NCOLS)]=0;
+				}
+			}
+		}
+		fallingBlock.topRow++;
+		fallingBlock.bottomRow++;
 	}
 };
 fallingBlock.newBlock();
 var canvas=document.getElementById("myCanvas");
 var cv=canvas.getContext("2d");
 
-setInterval(updateGame,300);
+//setInterval(updateGame,300);
+setInterval(updateGame,10);
+
+var t=0;
+var SPEED=50;
 
 function updateGame(){
-	updateBlocks();
-	drawBackground();
-	drawBlocks();
+	t++;
+	if(t>=SPEED){
+		t=0;
+		updateBlocks();
+	}
+		drawBackground();
+		drawBlocks();
 }
 
 function updateBlocks(){
-	if(fallingBlock.bottomRow>=otherBlocks.height){
-		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
-			for(j=0;j<NCOLS;j++){
-				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
-					if(otherBlocks.blocks[j+((i+1)*NCOLS)]>0){
-						fallingBlock.crash();
-						return;
-					}
-				}
-			}
-		}
-	}
-	for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
-		for(j=0;j<NCOLS;j++){
-			if(fallingBlock.blocks[j+(i*NCOLS)]>0){
-				fallingBlock.blocks[j+((i+1)*NCOLS)]=1;
-				fallingBlock.blocks[j+(i*NCOLS)]=0;
-			}
-		}
-	}
-	fallingBlock.topRow++;
-	fallingBlock.bottomRow++;
+	fallingBlock.fall();
 }
 
 function drawBlocks(){
@@ -145,7 +155,7 @@ document.onkeydown=function(event){
 			fallingBlock.moveRight();
 		break;
 		case 40:
-			moveDown();
+			fallingBlock.fall();
 		break;
 		case 122:		//z key
 			rotateCCW();
