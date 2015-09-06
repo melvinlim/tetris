@@ -4,6 +4,11 @@ var NROWS=61;
 var NCOLS=30;
 var PXSZ=10;
 
+var BLACK="#000000"
+var RED="#FF0000"
+var BLUE="#0000FF"
+var LIME="#00FF00"
+
 var INITIALHEIGHT=12;
 //var INITIALHEIGHT=NROWS-2;
 
@@ -200,6 +205,25 @@ fallingBlock.newBlock();
 var canvas=document.getElementById("myCanvas");
 var cv=canvas.getContext("2d");
 
+function randomColor(){
+	z=Math.floor((Math.random()*3));
+	switch(z){
+/*
+		case :
+		break;
+*/
+		case 0:
+			setColor(RED);
+		break;
+		case 1:
+			setColor(BLUE);
+		break;
+		case 2:
+			setColor(LIME);
+		break;
+	}
+}
+
 setInterval(updateGame,10);
 
 var t=0;
@@ -222,7 +246,8 @@ function updateBlocks(){
 var tmp;
 
 function drawBlocks(){
-	cv.fillStyle="#ffffff";
+	randomColor();
+//	cv.fillStyle="#ffffff";
 	tmp=fallingBlock.topRow;
 	if(tmp==0)	tmp=1;
 	for(i=tmp;i<=fallingBlock.bottomRow;i++){
@@ -233,6 +258,7 @@ function drawBlocks(){
 			}
 		}
 	}
+	cv.fillStyle="#ffffff";
 	for(i=otherBlocks.height;i<NROWS;i++){
 		for(j=0;j<NCOLS;j++){
 			if(otherBlocks.blocks[j+(i*NCOLS)]>0){
@@ -243,8 +269,14 @@ function drawBlocks(){
 	}
 }
 
+function setColor(color){
+	cv.fillStyle=color;
+}
+
 function drawBackground(){
-	cv.fillStyle="#000000";
+	setColor(BLACK);
+//	cv.fillStyle=BLACK;
+	//cv.fillStyle="#000000";
 	cv.fillRect(0,0,NCOLS*PXSZ,(NROWS-1)*PXSZ);
 }
 
