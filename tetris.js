@@ -4,8 +4,10 @@ var NROWS=60;
 var NCOLS=30;
 var PXSZ=10;
 
+var INITIALHEIGHT=10;
+
 var otherBlocks={
-	height:5,
+	height:INITIALHEIGHT,
 	//height:NROWS-1,
 	blocks:[]
 }
@@ -81,16 +83,37 @@ var fallingBlock={
 			otherBlocks.height=fallingBlock.bottomRow-1;
 		}
 	},
-	newBlock:function(){
+	newB0:function(){
 		fallingBlock.topRow=0;
 		fallingBlock.bottomRow=0;
+		for(j=5;j<9;j++){
+			fallingBlock.blocks[j]=1;
+		}
+	},
+	newB1:function(){
+		fallingBlock.topRow=0;
+		fallingBlock.bottomRow=0;
+		for(i=0;i<2;i++){
+			for(j=5;j<7;j++){
+				fallingBlock.blocks[j+(i*NCOLS)]=1;
+			}
+		}
+	},
+	newBlock:function(){
 		for(i=0;i<NROWS;i++){
 			for(j=0;j<NCOLS;j++){
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
 			}
 		}
-		for(j=5;j<9;j++){
-			fallingBlock.blocks[j]=1;
+		z=Math.floor((Math.random()*2));
+		switch(z){
+			case 0:
+				fallingBlock.newB0();
+			break;
+			case 1:
+				fallingBlock.newB1();
+			break;
+			default:
 		}
 	},
 	fall:function(){
