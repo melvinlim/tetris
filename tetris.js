@@ -21,6 +21,18 @@ var fallingBlock={
 	bottomRow:0,
 	blocks:[],
 	moveLeft:function(){
+		if(fallingBlock.bottomRow>=otherBlocks.height){
+			for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+				for(j=0;j<NCOLS;j++){
+					if(fallingBlock.blocks[j+((i)*NCOLS)]>0){
+						if(otherBlocks.blocks[j-1+((i)*NCOLS)]>0){
+//							fallingBlock.crash();
+							return;
+						}
+					}
+				}
+			}
+		}
 		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 			if(fallingBlock.blocks[0+(i*NCOLS)]>0){
 				return;
@@ -34,6 +46,18 @@ var fallingBlock={
 		}
 	},
 	moveRight:function(){
+		if(fallingBlock.bottomRow>=otherBlocks.height){
+			for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+				for(j=0;j<NCOLS;j++){
+					if(fallingBlock.blocks[j+((i)*NCOLS)]>0){
+						if(otherBlocks.blocks[j+1+((i)*NCOLS)]>0){
+//							fallingBlock.crash();
+							return;
+						}
+					}
+				}
+			}
+		}
 		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 			if(fallingBlock.blocks[(NCOLS-1)+(i*NCOLS)]>0){
 				return;
