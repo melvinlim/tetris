@@ -3,7 +3,6 @@ var j;
 var NROWS=60;
 var NCOLS=30;
 var PXSZ=10;
-var arr=[];
 
 var fallingBlock={
 	topRow:0,
@@ -11,9 +10,25 @@ var fallingBlock={
 	blocks:[],
 	moveLeft:function(){
 		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			if(fallingBlock.blocks[0+(i*NCOLS)]>0){
+				return;
+			}
 			for(j=1;j<NCOLS;j++){
 				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
 					fallingBlock.blocks[j+(i*NCOLS)-1]=1;
+					fallingBlock.blocks[j+(i*NCOLS)]=0;
+				}
+			}
+		}
+	},
+	moveRight:function(){
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			if(fallingBlock.blocks[(NCOLS-1)+(i*NCOLS)]>0){
+				return;
+			}
+			for(j=(NCOLS-2);j>=0;j--){
+				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
+					fallingBlock.blocks[j+(i*NCOLS)+1]=1;
 					fallingBlock.blocks[j+(i*NCOLS)]=0;
 				}
 			}
@@ -23,14 +38,12 @@ var fallingBlock={
 
 for(i=0;i<NROWS;i++){
 	for(j=0;j<NCOLS;j++){
-		arr[j+(i*NCOLS)]=0;
 		fallingBlock.blocks[j+(i*NCOLS)]=0;
 	}
 }
 
 for(j=5;j<9;j++){
 	fallingBlock.blocks[j]=1;
-	arr[j]=1;
 }
 var canvas=document.getElementById("myCanvas");
 var cv=canvas.getContext("2d");
@@ -102,7 +115,7 @@ document.onkeydown=function(event){
 			rotateCCW();
 		break;
 		case 39:
-			moveRight();
+			fallingBlock.moveRight();
 		break;
 		case 40:
 			moveDown();
