@@ -4,6 +4,7 @@ var NROWS=61;
 var NCOLS=30;
 var PXSZ=10;
 
+var WHITE="#FFFFFF"
 var BLACK="#000000"
 var RED="#FF0000"
 var BLUE="#0000FF"
@@ -25,6 +26,7 @@ for(i=(otherBlocks.height+1);i<NROWS;i++){
 }
 
 var fallingBlock={
+	color:WHITE,
 	pivot:7,
 	type:0,
 	state:0,
@@ -129,6 +131,22 @@ var fallingBlock={
 				fallingBlock.newB1();
 			break;
 			default:
+		}
+		z=Math.floor((Math.random()*3));
+		switch(z){
+	/*
+			case :
+			break;
+	*/
+			case 0:
+				fallingBlock.color=(RED);
+			break;
+			case 1:
+				fallingBlock.color=(BLUE);
+			break;
+			case 2:
+				fallingBlock.color=(LIME);
+			break;
 		}
 	},
 	clearBlock:function(){
@@ -246,8 +264,8 @@ function updateBlocks(){
 var tmp;
 
 function drawBlocks(){
-	randomColor();
-//	cv.fillStyle="#ffffff";
+//	randomColor();
+	setColor(fallingBlock.color);
 	tmp=fallingBlock.topRow;
 	if(tmp==0)	tmp=1;
 	for(i=tmp;i<=fallingBlock.bottomRow;i++){
@@ -258,7 +276,8 @@ function drawBlocks(){
 			}
 		}
 	}
-	cv.fillStyle="#ffffff";
+	setColor(WHITE);
+//	cv.fillStyle="#ffffff";
 	for(i=otherBlocks.height;i<NROWS;i++){
 		for(j=0;j<NCOLS;j++){
 			if(otherBlocks.blocks[j+(i*NCOLS)]>0){
@@ -275,8 +294,6 @@ function setColor(color){
 
 function drawBackground(){
 	setColor(BLACK);
-//	cv.fillStyle=BLACK;
-	//cv.fillStyle="#000000";
 	cv.fillRect(0,0,NCOLS*PXSZ,(NROWS-1)*PXSZ);
 }
 
