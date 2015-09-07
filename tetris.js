@@ -1,5 +1,4 @@
 //reminder to fix rotation when block is near floor.
-//bug probably with height or otherBlocks.blocks...
 var i;
 var j;
 //var NROWS=61;
@@ -134,8 +133,8 @@ var fallingBlock={
 				otherBlocks.blocks[j+(i*NCOLS)]|=fallingBlock.blocks[j+(i*NCOLS)];
 			}
 		}
-		if(fallingBlock.bottomRow<=otherBlocks.height){
-			otherBlocks.height=fallingBlock.bottomRow-1;
+		if(fallingBlock.topRow<=otherBlocks.height){
+			otherBlocks.height=fallingBlock.topRow-1;
 		}
 		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
 			if(lineComplete(i)){
@@ -143,11 +142,6 @@ var fallingBlock={
 			}
 		}
 		fallingBlock.newBlock();
-/*
-		if(fallingBlock.bottomRow<=otherBlocks.height){
-			otherBlocks.height=fallingBlock.bottomRow-1;
-		}
-*/
 	},
 	newB0:function(){
 		fallingBlock.type=0;
