@@ -160,6 +160,7 @@ var fallingBlock={
 	},
 	newBlock:function(){
 		fallingBlock.pivot=7;
+		fallingBlock.state=0;
 		for(i=0;i<NROWS;i++){
 			for(j=0;j<NCOLS;j++){
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
