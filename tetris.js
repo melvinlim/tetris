@@ -1,7 +1,9 @@
 var i;
 var j;
-var NROWS=61;
-var NCOLS=30;
+//var NROWS=61;
+//var NCOLS=30;
+var NROWS=31;
+var NCOLS=14;
 var PXSZ=10;
 
 var WHITE="#FFFFFF"
@@ -10,7 +12,7 @@ var RED="#FF0000"
 var BLUE="#0000FF"
 var LIME="#00FF00"
 
-var INITIALHEIGHT=12;
+var INITIALHEIGHT=20;
 //var INITIALHEIGHT=NROWS-2;
 
 var otherBlocks={
@@ -115,6 +117,21 @@ var fallingBlock={
 			}
 		}
 	},
+	newB2:function(){
+		fallingBlock.type=2;
+		fallingBlock.topRow=0;
+		fallingBlock.bottomRow=1;
+		for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+			fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+		}
+		fallingBlock.blocks[fallingBlock.pivot-1+(fallingBlock.bottomRow*NCOLS)]=1;
+/*
+		for(j=5;j<8;j++){
+			fallingBlock.blocks[j+(0*NCOLS)]=1;
+		}
+		fallingBlock.blocks[5+(1*NCOLS)]=1;
+*/
+	},
 	newBlock:function(){
 		fallingBlock.pivot=7;
 		for(i=0;i<NROWS;i++){
@@ -122,13 +139,16 @@ var fallingBlock={
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
 			}
 		}
-		z=Math.floor((Math.random()*2));
+		z=Math.floor((Math.random()*3));
 		switch(z){
 			case 0:
 				fallingBlock.newB0();
 			break;
 			case 1:
 				fallingBlock.newB1();
+			break;
+			case 2:
+				fallingBlock.newB2();
 			break;
 			default:
 		}
@@ -160,7 +180,7 @@ var fallingBlock={
 		fallingBlock.state--;
 		if(fallingBlock.state<0)	fallingBlock.state=3;
 		switch(fallingBlock.type){
-			case 0:
+			case 0:	//I
 				switch(fallingBlock.state){
 					case 0:
 					case 2:
@@ -187,7 +207,48 @@ var fallingBlock={
 					default:
 				}
 			break;
-			case 1:
+			case 1:	//box
+			break;
+			case 2:	//7
+				switch(fallingBlock.state){
+					case 0:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+1;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+							fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot-1+(fallingBlock.bottomRow*NCOLS)]=1;
+					break;
+					case 1:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+2;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+1);j++){
+							fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+						}
+						j=(fallingBlock.pivot);
+						for(i=(fallingBlock.topRow+1);i<=(fallingBlock.bottomRow);i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+					break;
+					case 2:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+1;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+							fallingBlock.blocks[j+(fallingBlock.bottomRow*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot+1+(fallingBlock.topRow*NCOLS)]=1;
+					break;
+					case 3:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+2;
+						j=(fallingBlock.pivot);
+						for(i=(fallingBlock.topRow);i<=(fallingBlock.bottomRow);i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot+1+(fallingBlock.bottomRow*NCOLS)]=1;
+					break;
+					default:
+				}
 			break;
 			default:
 		}
@@ -300,6 +361,7 @@ function drawBackground(){
 document.onkeydown=function(event){
 	event=event||window.event;
 	var x=event.keyCode;
+//alert(x);
 	switch(x){
 		case 37:
 			fallingBlock.moveLeft();
@@ -313,9 +375,11 @@ document.onkeydown=function(event){
 		case 40:
 			fallingBlock.fall();
 		break;
+		case 90:
 		case 122:		//z key
 			fallingBlock.rotateCCW();
 		break;
+		case 88:
 		case 120:		//x key
 			fallingBlock.rotateCW();
 		break;
