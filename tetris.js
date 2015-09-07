@@ -52,6 +52,13 @@ var fallingBlock={
 			if(fallingBlock.blocks[0+(i*NCOLS)]>0){
 				return;
 			}
+		}
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+/*
+			if(fallingBlock.blocks[0+(i*NCOLS)]>0){
+				return;
+			}
+*/
 			for(j=1;j<NCOLS;j++){
 				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
 					fallingBlock.blocks[j+(i*NCOLS)-1]=1;
@@ -78,6 +85,13 @@ var fallingBlock={
 			if(fallingBlock.blocks[(NCOLS-1)+(i*NCOLS)]>0){
 				return;
 			}
+		}
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+/*
+			if(fallingBlock.blocks[(NCOLS-1)+(i*NCOLS)]>0){
+				return;
+			}
+*/
 			for(j=(NCOLS-2);j>=0;j--){
 				if(fallingBlock.blocks[j+(i*NCOLS)]>0){
 					fallingBlock.blocks[j+(i*NCOLS)+1]=1;
@@ -125,12 +139,24 @@ var fallingBlock={
 			fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
 		}
 		fallingBlock.blocks[fallingBlock.pivot-1+(fallingBlock.bottomRow*NCOLS)]=1;
-/*
-		for(j=5;j<8;j++){
-			fallingBlock.blocks[j+(0*NCOLS)]=1;
+	},
+	newB3:function(){
+		fallingBlock.type=3;
+		fallingBlock.topRow=0;
+		fallingBlock.bottomRow=1;
+		fallingBlock.blocks[fallingBlock.pivot+(fallingBlock.topRow*NCOLS)]=1;
+		for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+			fallingBlock.blocks[j+(fallingBlock.bottomRow*NCOLS)]=1;
 		}
-		fallingBlock.blocks[5+(1*NCOLS)]=1;
-*/
+	},
+	newB4:function(){
+		fallingBlock.type=4;
+		fallingBlock.topRow=0;
+		fallingBlock.bottomRow=1;
+		for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+			fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+		}
+		fallingBlock.blocks[fallingBlock.pivot+1+(fallingBlock.bottomRow*NCOLS)]=1;
 	},
 	newBlock:function(){
 		fallingBlock.pivot=7;
@@ -139,7 +165,7 @@ var fallingBlock={
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
 			}
 		}
-		z=Math.floor((Math.random()*3));
+		z=Math.floor((Math.random()*5));
 		switch(z){
 			case 0:
 				fallingBlock.newB0();
@@ -149,6 +175,12 @@ var fallingBlock={
 			break;
 			case 2:
 				fallingBlock.newB2();
+			break;
+			case 3:
+				fallingBlock.newB3();
+			break;
+			case 4:
+				fallingBlock.newB4();
 			break;
 			default:
 		}
@@ -212,6 +244,11 @@ var fallingBlock={
 			case 2:	//7
 				switch(fallingBlock.state){
 					case 0:
+						if(fallingBlock.pivot<1||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
+						}
 						fallingBlock.clearBlock();
 						fallingBlock.bottomRow=fallingBlock.topRow+1;
 						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
@@ -231,6 +268,11 @@ var fallingBlock={
 						}
 					break;
 					case 2:
+						if(fallingBlock.pivot<1||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
+						}
 						fallingBlock.clearBlock();
 						fallingBlock.bottomRow=fallingBlock.topRow+1;
 						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
@@ -246,6 +288,105 @@ var fallingBlock={
 							fallingBlock.blocks[j+(i*NCOLS)]=1;
 						}
 						fallingBlock.blocks[fallingBlock.pivot+1+(fallingBlock.bottomRow*NCOLS)]=1;
+					break;
+					default:
+				}
+			break;
+			case 3:	//T
+				switch(fallingBlock.state){
+					case 0:
+						if(fallingBlock.pivot<1||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
+						}
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+1;
+						fallingBlock.blocks[fallingBlock.pivot+(fallingBlock.topRow*NCOLS)]=1;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+							fallingBlock.blocks[j+(fallingBlock.bottomRow*NCOLS)]=1;
+						}
+					break;
+					case 1:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+2;
+						fallingBlock.blocks[((fallingBlock.topRow+1)*NCOLS)+fallingBlock.pivot+1]=1;
+						j=(fallingBlock.pivot);
+						for(i=(fallingBlock.topRow);i<=(fallingBlock.bottomRow);i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+					break;
+					case 2:
+						if(fallingBlock.pivot<1||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
+						}
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+1;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+							fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot+(fallingBlock.bottomRow*NCOLS)]=1;
+					break;
+					case 3:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+2;
+						fallingBlock.blocks[((fallingBlock.topRow+1)*NCOLS)+fallingBlock.pivot-1]=1;
+						j=(fallingBlock.pivot);
+						for(i=(fallingBlock.topRow);i<=(fallingBlock.bottomRow);i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+					break;
+				}
+			break;
+			case 4:	//L
+				switch(fallingBlock.state){
+					case 0:
+						if(fallingBlock.pivot<1||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
+						}
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+1;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+							fallingBlock.blocks[j+(fallingBlock.topRow*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot+1+(fallingBlock.bottomRow*NCOLS)]=1;
+					break;
+					case 1:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+2;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+1);j++){
+							fallingBlock.blocks[j+(fallingBlock.bottomRow*NCOLS)]=1;
+						}
+						j=(fallingBlock.pivot);
+						for(i=(fallingBlock.topRow);i<=(fallingBlock.topRow+1);i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+					break;
+					case 2:
+						if(fallingBlock.pivot<1||fallingBlock.pivot>(NCOLS-2)){
+							fallingBlock.state++;
+							if(fallingBlock.state>3)	fallingBlock.state=0;
+							return;
+						}
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+1;
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+2);j++){
+							fallingBlock.blocks[j+(fallingBlock.bottomRow*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot-1+(fallingBlock.topRow*NCOLS)]=1;
+					break;
+					case 3:
+						fallingBlock.clearBlock();
+						fallingBlock.bottomRow=fallingBlock.topRow+2;
+						j=(fallingBlock.pivot);
+						for(i=(fallingBlock.topRow);i<=(fallingBlock.bottomRow);i++){
+							fallingBlock.blocks[j+(i*NCOLS)]=1;
+						}
+						fallingBlock.blocks[fallingBlock.pivot+1+(fallingBlock.topRow*NCOLS)]=1;
 					break;
 					default:
 				}
