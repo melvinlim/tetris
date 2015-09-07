@@ -1,3 +1,5 @@
+//reminder to fix rotation when block is near floor.
+//bug probably with height or otherBlocks.blocks...
 var i;
 var j;
 //var NROWS=61;
@@ -18,7 +20,32 @@ var INITIALHEIGHT=20;
 var otherBlocks={
 	height:INITIALHEIGHT,
 	//height:NROWS-1,
-	blocks:[]
+	blocks:[],
+	fall:function(line){
+		if(line<otherBlocks.height)	return;
+//alert(otherBlocks.height);
+//alert(line-1);
+		for(i=(line-1);i>=(otherBlocks.height);i--){
+			for(j=0;j<NCOLS;j++){
+				if(otherBlocks.blocks[j+(i*NCOLS)]>0){
+					otherBlocks.blocks[j+((i+1)*NCOLS)]=1;
+				}else{
+					otherBlocks.blocks[j+((i+1)*NCOLS)]=0;
+				}
+				otherBlocks.blocks[j+(i*NCOLS)]=0;
+			}
+		}
+		otherBlocks.height++;
+	}
+}
+
+function lineComplete(line){
+	for(j=0;j<NCOLS;j++){
+		if(otherBlocks.blocks[j+((line)*NCOLS)]==0){
+			return 0;
+		}
+	}
+	return 1;
 }
 
 for(i=(otherBlocks.height+1);i<NROWS;i++){
@@ -107,10 +134,20 @@ var fallingBlock={
 				otherBlocks.blocks[j+(i*NCOLS)]|=fallingBlock.blocks[j+(i*NCOLS)];
 			}
 		}
-		fallingBlock.newBlock();
 		if(fallingBlock.bottomRow<=otherBlocks.height){
 			otherBlocks.height=fallingBlock.bottomRow-1;
 		}
+		for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
+			if(lineComplete(i)){
+				otherBlocks.fall(i);
+			}
+		}
+		fallingBlock.newBlock();
+/*
+		if(fallingBlock.bottomRow<=otherBlocks.height){
+			otherBlocks.height=fallingBlock.bottomRow-1;
+		}
+*/
 	},
 	newB0:function(){
 		fallingBlock.type=0;
