@@ -7,6 +7,16 @@ var NROWS=31;
 var NCOLS=14;
 var PXSZ=10;
 
+var time=0;
+var timeDisp=document.getElementById("time");
+timeDisp.innerHTML=time.toFixed(2);
+
+var SCORETEXT="Score: "
+var score=0;
+var scoreDisp=document.getElementById("score");
+scoreDisp.innerHTML=(score);
+//scoreDisp.innerHTML=SCORETEXT.concat(score);
+
 var WHITE="#FFFFFF"
 var BLACK="#000000"
 var RED="#FF0000"
@@ -44,6 +54,9 @@ function lineComplete(line){
 			return 0;
 		}
 	}
+	score++;
+	scoreDisp.innerHTML=score;
+	//scoreDisp.innerHTML=SCORETEXT.concat(score);
 	return 1;
 }
 
@@ -836,8 +849,10 @@ function updateGame(){
 		t=0;
 		updateBlocks();
 	}
-		drawBackground();
-		drawBlocks();
+	drawBackground();
+	drawBlocks();
+	time=time+0.01;
+	timeDisp.innerHTML=time.toFixed(2);
 }
 
 function updateBlocks(){
