@@ -242,7 +242,7 @@ var fallingBlock={
 				fallingBlock.blocks[j+(i*NCOLS)]=0;
 			}
 		}
-		z=Math.floor((Math.random()*5));
+		z=Math.floor((Math.random()*6));
 		//z=Math.floor((Math.random()*7));
 		switch(z){
 			case 0:
@@ -684,6 +684,18 @@ var fallingBlock={
 								return;
 							}
 						}
+						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+1);j++){
+							if(otherBlocks.blocks[j+(fallingBlock.topRow*NCOLS)]>0){
+								undoTurn(direction);
+								return;
+							}
+						}
+						for(j=(fallingBlock.pivot);j<(fallingBlock.pivot+2);j++){
+							if(otherBlocks.blocks[j+((fallingBlock.topRow+1)*NCOLS)]){
+								undoTurn(direction);
+								return;
+							}
+						}
 						fallingBlock.clearBlock();
 						fallingBlock.bottomRow=fallingBlock.topRow+1;
 						for(j=(fallingBlock.pivot-1);j<(fallingBlock.pivot+1);j++){
@@ -695,6 +707,20 @@ var fallingBlock={
 					break;
 					case 1:
 					case 3:
+						j=fallingBlock.pivot+1;
+						for(i=(fallingBlock.topRow);i<(fallingBlock.topRow+2);i++){
+							if(otherBlocks.blocks[j+(i*NCOLS)]>0){
+								undoTurn(direction);
+								return;
+							}
+						}
+						j=fallingBlock.pivot;
+						for(i=(fallingBlock.topRow+1);i<=(fallingBlock.topRow+2);i++){
+							if(otherBlocks.blocks[j+(i*NCOLS)]>0){
+								undoTurn(direction);
+								return;
+							}
+						}
 						fallingBlock.clearBlock();
 						fallingBlock.bottomRow=fallingBlock.topRow+2;
 						j=fallingBlock.pivot+1;
