@@ -941,15 +941,19 @@ window.onkeydown=function(event){
   var x=event.keyCode;
   //alert(x);
   switch(x){
+    case 65:  //a key
     case 37:
       fallingBlock.moveLeft();
       break;
+    case 87:	//w key
     case 38:	//up key
       fallingBlock.rotate(0);
       break;
+    case 68:  //d key
     case 39:
       fallingBlock.moveRight();
       break;
+    case 83:  //s key
     case 40:
       fallingBlock.fall();
       break;
