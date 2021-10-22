@@ -161,6 +161,13 @@ var fallingBlock={
     fallingBlock.pivot++;
   },
   crash:function(){
+    if(fallingBlock.topRow==0){
+      //alert("game over");
+      state="game over";
+      clearInterval(gameInterval);
+      showMenu("game over");
+      return;
+    }
     for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
       for(j=0;j<NCOLS;j++){
         otherBlocks.blocks[j+(i*NCOLS)]|=fallingBlock.blocks[j+(i*NCOLS)];
@@ -930,10 +937,12 @@ function drawBackground(){
 
 function startGame(){
   initLines(INITIALHEIGHT);
+  //initLines(4);
   fallingBlock.newBlock();
   gameInterval=setInterval(updateGame,10);
 
   t=0;
+  time=0;
   SPEED=50;
 }
 
@@ -982,6 +991,11 @@ window.onkeydown=function(event){
     case 120:		//x key
       fallingBlock.rotate(1);
       break;
+    case 13:		//enter key
+      if(state=="game over"){
+        startGame();
+      }
+      break;
     case 80:		//p key
       pause();
       break;
@@ -998,12 +1012,13 @@ canvas.onmousemove=function(event){
 
 //startGame();
 
-function showMenu(){
+function showMenu(text){
   initLines(0);
   updateGame();
   cv.font="100% Arial";
   cv.fillStyle="black";
-  cv.fillText("click here to start",5,(NROWS*PXSZ/2));
+  cv.fillText(text,5,(NROWS*PXSZ/2));
+  //cv.fillText("click here to start",5,(NROWS*PXSZ/2));
 }
 
-showMenu();
+showMenu("click here to start");
