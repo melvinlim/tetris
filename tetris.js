@@ -23,6 +23,8 @@ var RED="#FF0000"
 var BLUE="#0000FF"
 var LIME="#00FF00"
 
+var gameInterval;
+
 //var INITIALHEIGHT=20;
 var INITIALHEIGHT=NROWS-2;
 
@@ -929,10 +931,25 @@ function drawBackground(){
 function startGame(){
   initLines(INITIALHEIGHT);
   fallingBlock.newBlock();
-  setInterval(updateGame,10);
+  gameInterval=setInterval(updateGame,10);
 
   t=0;
   SPEED=50;
+}
+
+function pause(){
+  if(state=="running"){
+    //alert("clearing interval");
+    cv.font="100% Arial";
+    cv.fillStyle="gray";
+    cv.fillText("paused",5,(NROWS*PXSZ/2));
+    clearInterval(gameInterval);
+    state="paused";
+  }else if(state=="paused"){
+    //alert("setting interval");
+    gameInterval=setInterval(updateGame,10);
+    state="running";
+  }
 }
 
 //document.onkeydown=function(event){
@@ -964,6 +981,9 @@ window.onkeydown=function(event){
     case 88:
     case 120:		//x key
       fallingBlock.rotate(1);
+      break;
+    case 80:		//p key
+      pause();
       break;
     default:
   }
