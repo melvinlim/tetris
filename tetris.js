@@ -1004,7 +1004,8 @@ window.onkeydown=function(event){
 }
 var state="idle";
 canvas.onmousemove=function(event){
-  if(state!="running"){
+  //if(state!="running"){
+  if(state=="idle"){
     state="running";
     startGame();
   }
