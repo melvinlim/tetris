@@ -935,7 +935,8 @@ function startGame(){
   SPEED=50;
 }
 
-document.onkeydown=function(event){
+//document.onkeydown=function(event){
+window.onkeydown=function(event){
   event=event||window.event;
   var x=event.keyCode;
   //alert(x);
