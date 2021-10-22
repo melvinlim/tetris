@@ -871,8 +871,6 @@ function randomColor(){
   }
 }
 
-setInterval(updateGame,10);
-
 var t=0;
 var SPEED=50;
 
@@ -884,8 +882,8 @@ function updateGame(){
   }
   drawBackground();
   drawBlocks();
-  time=time+0.01;
   timeDisp.innerHTML=time.toFixed(2);
+  time=time+0.01;
 }
 
 function updateBlocks(){
@@ -929,7 +927,7 @@ function drawBackground(){
 }
 
 function startGame(){
-  initLines(INITIALHEIGHT)
+  initLines(INITIALHEIGHT);
   fallingBlock.newBlock();
   setInterval(updateGame,10);
 
@@ -965,5 +963,16 @@ document.onkeydown=function(event){
     default:
   }
 }
+var state="idle";
+canvas.onmousemove=function(event){
+  if(state!="running"){
+    state="running";
+    startGame();
+  }
+}
 
-startGame();
+//initLines(0);
+updateGame();
+//startGame();
+cv.font="100% Arial";
+cv.fillText("click here to start",5,(NROWS*PXSZ/2));
