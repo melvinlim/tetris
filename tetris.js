@@ -277,19 +277,19 @@ var fallingBlock={
     }
     z=Math.floor((Math.random()*3));
     switch(z){
-      /*
+        /*
       case :
       break;
       */
       case 0:
-        fallingBlock.color=(RED);
-        break;
+      fallingBlock.color=(RED);
+      break;
       case 1:
-        fallingBlock.color=(BLUE);
-        break;
+      fallingBlock.color=(BLUE);
+      break;
       case 2:
-        fallingBlock.color=(LIME);
-        break;
+      fallingBlock.color=(LIME);
+      break;
     }
   },
   clearBlock:function(){
@@ -855,19 +855,19 @@ function checkCollision(){
 function randomColor(){
   z=Math.floor((Math.random()*3));
   switch(z){
-    /*
+      /*
     case :
     break;
     */
     case 0:
-      setColor(RED);
-      break;
+    setColor(RED);
+    break;
     case 1:
-      setColor(BLUE);
-      break;
+    setColor(BLUE);
+    break;
     case 2:
-      setColor(LIME);
-      break;
+    setColor(LIME);
+    break;
   }
 }
 
@@ -971,8 +971,14 @@ canvas.onmousemove=function(event){
   }
 }
 
-//initLines(0);
-updateGame();
 //startGame();
-cv.font="100% Arial";
-cv.fillText("click here to start",5,(NROWS*PXSZ/2));
+
+function showMenu(){
+  initLines(0);
+  updateGame();
+  cv.font="100% Arial";
+  cv.fillStyle="black";
+  cv.fillText("click here to start",5,(NROWS*PXSZ/2));
+}
+
+showMenu();
