@@ -59,6 +59,9 @@ function lineComplete(line){
   score++;
   scoreDisp.innerHTML=score;
   //scoreDisp.innerHTML=SCORETEXT.concat(score);
+  if(SPEED>1){
+    SPEED=(SPEED*0.9);
+  }
   return 1;
 }
 
@@ -885,7 +888,8 @@ function randomColor(){
 }
 
 var t=0;
-var SPEED=50;
+var INITIALSPEED=50;
+var SPEED;
 
 function updateGame(){
   drawBackground();
@@ -947,7 +951,7 @@ function startGame(){
 
   t=0;
   time=0;
-  SPEED=50;
+  SPEED=INITIALSPEED;
 }
 
 function pause(){
