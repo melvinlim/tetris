@@ -884,13 +884,13 @@ var t=0;
 var SPEED=50;
 
 function updateGame(){
+  drawBackground();
+  drawBlocks();
   t++;
   if(t>=SPEED){
     t=0;
     updateBlocks();
   }
-  drawBackground();
-  drawBlocks();
   timeDisp.innerHTML=time.toFixed(2);
   time=time+0.01;
 }
