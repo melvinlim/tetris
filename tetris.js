@@ -820,6 +820,9 @@ var fallingBlock={
       default:
     }
   },
+  drop:function(){
+    while (!fallingBlock.fall());
+  },
   fall:function(){
     if(fallingBlock.bottomRow>=otherBlocks.height){
       for(i=fallingBlock.topRow;i<=fallingBlock.bottomRow;i++){
@@ -827,7 +830,7 @@ var fallingBlock={
           if(fallingBlock.blocks[j+((i)*NCOLS)]>0){
             if(otherBlocks.blocks[j+((i+1)*NCOLS)]>0){
               fallingBlock.crash();
-              return;
+              return true;
             }
           }
         }
@@ -843,6 +846,7 @@ var fallingBlock={
     }
     fallingBlock.topRow++;
     fallingBlock.bottomRow++;
+    return false;
   }
 };
 var canvas=document.getElementById("myCanvas");
@@ -995,6 +999,9 @@ window.onkeydown=function(event){
       if(state=="game over"){
         startGame();
       }
+      break;
+    case 32:    //space bar
+      fallingBlock.drop();
       break;
     case 80:		//p key
       pause();
