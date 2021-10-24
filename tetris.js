@@ -11,7 +11,7 @@ var time=0;
 var timeDisp=document.getElementById("time");
 timeDisp.innerHTML=time.toFixed(2);
 
-var SCORETEXT="Score: "
+//var SCORETEXT="Score: "
 var score=0;
 var scoreDisp=document.getElementById("score");
 scoreDisp.innerHTML=(score);
@@ -289,10 +289,6 @@ var fallingBlock={
     }
     z=Math.floor((Math.random()*3));
     switch(z){
-        /*
-      case :
-      break;
-      */
       case 0:
       fallingBlock.color=(RED);
       break;
@@ -871,10 +867,6 @@ function checkCollision(){
 function randomColor(){
   z=Math.floor((Math.random()*3));
   switch(z){
-      /*
-    case :
-    break;
-    */
     case 0:
     setColor(RED);
     break;
@@ -947,7 +939,7 @@ function startGame(){
   initLines(INITIALHEIGHT);
   //initLines(4);
   fallingBlock.newBlock();
-  gameInterval=setInterval(updateGame,10);
+  gameInterval=setInterval(updateGame,10);  //calls updateGame every 10 milliseconds. 10 milliseconds is the minimum possible value.
 
   t=0;
   time=0;
@@ -964,7 +956,7 @@ function pause(){
     state="paused";
   }else if(state=="paused"){
     //alert("setting interval");
-    gameInterval=setInterval(updateGame,10);
+    gameInterval=setInterval(updateGame,10);  //calls updateGame every 10 milliseconds. 10 milliseconds is the minimum possible value.
     state="running";
   }
 }
@@ -1030,7 +1022,6 @@ function showMenu(text){
   cv.font="100% Arial";
   cv.fillStyle="black";
   cv.fillText(text,5,(NROWS*PXSZ/2));
-  //cv.fillText("click here to start",5,(NROWS*PXSZ/2));
 }
 
 showMenu("click here to start");
